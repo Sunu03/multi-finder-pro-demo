@@ -1,0 +1,138 @@
+Include the styles from content.css
+.multiwordfinder-highlight {
+    padding: 2px;
+    color: #0d0d11;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px #1d1a224d;
+  }
+  
+  .selected-word {
+    background-color: #ffffff;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 0 2px;
+  }
+  
+  #custom-scrollbar-indicator {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    opacity: 100%;
+    z-index: 9999;
+  }
+  
+  #custom-scrollbar-indicator div {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+  }
+  
+  .current-word {
+    border: 5px solid;
+    outline: 1px solid red;
+  }
+  
+  /* Include the styles from popup.css */
+  body {
+    background-color: #ffffff;
+    color: #201f2e;
+  }
+  
+  .card {
+    cursor: pointer;
+    width: 360px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-shadow: 10px 10px 10px rgba(16, 15, 19, 0.589);
+  }
+  
+  .custom-scroll::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .custom-scroll::-webkit-scrollbar-track {
+    background-color: #0f0e0f;
+  }
+  
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #716577;
+    border-radius: 10px;
+  }
+  
+  .bg-dark-gray {
+    background-color: #282839;
+  }
+  
+  .search-btn {
+    background-color: #19181b;
+    border: 1px solid #8492c3;
+  }
+  
+  .folder-list-bg {
+    background-color: #121113;
+    border: 1px solid #8492c3;
+  }
+  
+  #folderDropdown {
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  
+  .edit-popup-bg {
+    background-color: #19181b;
+    max-height: 90vh;
+    width: 350px;
+    overflow-y: auto;
+  }
+  
+  .edit-folder-dropdown-bg {
+    background-color: #282839;
+    max-height: 100px;
+    overflow-y: auto;
+  }
+  
+  .edit-note-textarea {
+    height: 200px;
+    background-color: #282839;
+  }
+  
+  .border-cus {
+    border: 1px solid #8492c3;
+  }
+  
+  #addWordToggle {
+    transition: transform 0.4s;
+  }
+  
+  #addWordToggle.collapsed {
+    transform: rotate(-90deg);
+  }
+  
+  .note-container-css {
+    background-color: #282839;
+  }
+  
+  /* Additional styles for the demo site */
+  #extension-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 400px;
+    height: 600px;
+    background-color: #161821;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+  }
+  
+  #test-content {
+   padding: 20px;
+  }

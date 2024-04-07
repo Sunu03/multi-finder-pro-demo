@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi-Finder Pro Demo</title>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <div id="extension-container" style="background-image: url('./bg.jpg');">
+    <div class="w-full h-12 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="icon.png" alt="Logo" class="h-6 w-6 mr-2">
+        <span class="text-lg">Multi-Finder Pro</span>
+      </div>
+      <div class="flex items-center">
+        <div id="importExportButtons" class="hidden">
+          <button id="importButton" class="text-white text-sm mr-2">Import</button>
+          <button id="exportButton" class="text-white text-sm mr-4">Export</button>
+        </div>
+        <button id="hamburgerMenu" class="text-white text-2xl z-10 transition-transform duration-300 ease-in-out transform">&#9776;</button>
+      </div>
+    </div>
+
+    <div id="mainContent" class="mt-3 mb-16">
+      <div class="p-4 rounded">
+        <label for="mainSearch" class="block mt-0 text-center text-2xl pb-2">Main Search</label>
+        <input type="text" id="mainSearch" placeholder="Enter words separated by commas" class="w-full px-2 py-1 text-center text-white mb-2 rounded bg-dark-gray">
+        <div class="flex">
+          <button id="mainSearchBtn" class="search-btn hover:bg-gray-800 text-white px-3 py-1 rounded w-full flex items-center justify-center text-xl">Search</button>
+        </div>
+        <div class="flex mt-2">
+          <button id="partialSearchBtn" class="search-btn hover:bg-gray-800 text-white px-3 py-1 rounded w-full flex items-center justify-center text-xl mr-2">Partial Match</button>
+          <button id="clearAllBtn" class="search-btn hover:bg-red-800 text-white px-3 py-1 rounded w-full flex items-center justify-center text-xl">Clear All</button>
+        </div>
+      </div>
+      <div id="resultsContainer" class="mt-4"></div>
+    </div>
+
+    <div id="folderList" class="hidden">
+        <div>
+          <div class="folder-list-bg mt-2 pl-3 pr-3 rounded-lg">
+            <h3 id="addWordSection" class="text-base mt-2 m-2 flex items-center justify-between cursor-pointer">
+              Save Custom Word
+              <span id="addWordToggle" class="text-xl collapsed">&minus;</span>
+            </h3>
+            <div id="addWordContent" class="hidden">
+              <input type="text" id="wordInput" placeholder="Enter a word" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray">
+              <div class="relative">
+                <input type="text" id="folderInput" placeholder="Enter or select a folder" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray">
+                <div id="folderDropdown" class="custom-scroll absolute z-10 w-full rounded-b shadow-lg hidden bg-dark-gray"></div>
+              </div>
+              <div class="flex items-center">
+                <input type="color" id="colorInput" value="#000000" class="rounded">
+                <label for="colorInput" class="mr-2 ml-2">or</label>
+                <input type="text" id="colorHexInput" placeholder="Enter hex code" class="ml-2 px-2 py-1 text-white rounded bg-dark-gray">
+                <button id="addWordButton" class="search-btn hover:bg-blue-600 text-white px-8 font-thin rounded w-1 flex items-center justify-center text-xl ml-10">Save</button>
+              </div>
+              <input type="hidden" id="selectedWords" value="[]">
+              <br/>
+              <p class="text-xs text-center text-gray-400 mb-1">If no color is selected, a random color will be assigned.</p>
+            </div>
+          </div>
+          <div class="flex mt-4">
+            <button id="folderSearchBtn" class="search-btn hover:bg-gray-800 text-white px-3 py-1 rounded w-full flex items-center justify-center text-xl">Search</button>
+            <button id="folderClearAllBtn" class="search-btn hover:bg-red-800 text-white px-3 py-1 rounded w-full flex items-center justify-center text-xl ml-2">Clear All</button>
+          </div>
+          <h2 class="mt-4 text-lg text-center uppercase">Saved Words</h2>
+          <div class="pl-4 pr-4 pt-4">
+            <input type="text" id="wordSearchInput" placeholder="Search words by tag or word" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray">
+          </div>
+          <div class="flex items-center pt-1 pl-20">
+            <button id="selectAllButton" class="search-btn px-2 py-1 text-white rounded hover:bg-gray-700">Select Visible</button>
+            <button id="clearSelectedButton" class="ml-4 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Unselect All</button>
+          </div>
+          <div id="wordList" class="mb-4"></div>
+          <div id="wordsContainer" class="rounded shadow"></div>
+        </div>
+      </div>
+  
+      <div id="editWordPopup" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-95">
+        <div class="custom-scroll p-4 rounded-lg shadow edit-popup-bg">
+          <h3 class="text-lg font-bold mb-2">Edit Word</h3>
+          <input type="text" id="editWordInput" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray" readonly>
+          <p class="font-medium pb-1">Color:</p>
+          <input type="color" id="editColorInput" class="mb-2">
+          <p class="font-medium pb-1">Folder:</p>
+          <div class="relative">
+            <input type="text" id="editFolderInput" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray">
+            <div id="editFolderDropdown" class="custom-scroll absolute z-10 w-full rounded-b shadow-lg hidden edit-folder-dropdown-bg"></div>
+          </div>
+          <p class="font-medium pb-1">Tags:</p>
+          <input type="text" id="editTagsInput" placeholder="Enter tags (comma-separated)" class="w-full px-2 py-1 text-white mb-2 rounded bg-dark-gray">
+          <p class="font-medium pb-1">Notes:</p>
+          <textarea id="editNoteInput" placeholder="Enter a note/description" class="w-full px-2 py-1 text-white mb-2 rounded edit-note-textarea"></textarea>
+          <div class="flex justify-end">
+            <button id="saveEditButton" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded mr-2">Save</button>
+            <button id="cancelEditButton" class="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded">Cancel</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div id="test-content">
+    <div class="flex items-center mb-5">
+    <img src="./icon.png"style="height:50px;"/>
+    <h1 class="ml-3
+    font-bold" style="font-size: 30px;"> Multi-Finder Pro Demo</h1>
+    </div>
+    <p style="margin-right: 50%; border-radius:10px; padding: 10px; background-color: bisque; ">This is not a 1-1 replication of the real Multi-Finder Pro extension but this should give you an idea of how it looks and works!</p>
+</br>
+    <h2 class="font-bold mb-2 text-xl"> Networking:</h2>
+ <hr/>
+ <br/>
+ <p>Networking, at its core, represents the intricate tapestry of protocols, devices, and methodologies that facilitate communication between computers, devices, and users over distances both short and vast, acting as the backbone of the modern digital world. It begins with the fundamental distinction between Local Area Networks (LANs), which connect devices in close proximity—such as within a home, office, or school—to enable high-speed communication and resource sharing, and Wide Area Networks (WANs), which cover broader geographic areas, often using leased telecommunication lines to connect disparate LANs, thereby forming the vast, interconnected web of networks known as the internet. At the heart of these networks lie routers and switches, devices tasked with the critical roles of directing traffic and managing connections; routers, for instance, determine the optimal path for data packets to traverse the complex maze of interconnected networks, ensuring they reach their intended destination, while switches focus on facilitating communication within a single network, directing packets between devices on the same LAN to maintain efficient, localized data exchange. Integral to the operation of these networks are Network Interface Cards (NICs), which provide the physical interface for devices to connect to a network, enabling them to send and receive data over wired Ethernet or wireless Wi-Fi connections. Underpinning the functionality of these networks are a multitude of protocols, each designed for specific tasks; for instance, the Internet Protocol (IP) assigns unique addresses to devices, facilitating accurate packet delivery across the global network, while the Transmission Control Protocol (TCP) ensures reliable data transmission, verifying that packets arrive intact and in order through mechanisms like error checking and flow control. Among the most ubiquitous protocols is the Hypertext Transfer Protocol (HTTP), which governs the exchange of data on the World Wide Web, making possible the seamless access to websites and online resources that has become integral to daily life and commerce. Meanwhile, its secure counterpart, HTTPS, adds a layer of encryption to protect data in transit, safeguarding against interception and ensuring the privacy and integrity of the information exchanged. This intricate ecosystem of networks, devices, and protocols not only facilitates the vast majority of human communication and data exchange today but also continuously evolves, driven by advancements in technology and an ever-increasing demand for faster, more secure, and more reliable connectivity, underscoring the critical importance of networking in shaping the future of our digital, interconnected world.
+
+This continuous narrative aims to encapsulate the vast and complex domain of networking into a singular, albeit lengthy, paragraph, touching upon its essential components and their interrelations in supporting the flow of digital information across the globe.</p>
+<br/>
+<h2 class="font-bold text-xl mb-2"> TCP vs UDP:</h2>
+<hr/>
+<br/>
+<p>
+    When discussing the foundational elements of network communication, two protocols often come to the forefront due to their pivotal roles in data transmission across the internet: Transmission Control Protocol (TCP) and User Datagram Protocol (UDP). Both residing in the transport layer of the OSI model, TCP and UDP serve as crucial conduits for the vast array of network communications that enable the internet, yet they do so in fundamentally different ways, each tailored to specific types of data transmission needs, thereby reflecting a balance between efficiency and reliability in network communication.
+    
+    TCP, renowned for its reliability, establishes a connection-oriented pathway between two endpoints on a network, ensuring that data packets are delivered exactly as sent, in the correct order, without duplicates. This protocol initiates communication through a process known as the three-way handshake, an exchange that establishes a connection between the sender and receiver before data transmission begins. The handshake involves the sender transmitting a SYN (synchronize) packet to the receiver, which responds with a SYN-ACK (synchronize-acknowledge) packet, to which the sender replies with an ACK (acknowledge) packet, thus establishing a reliable connection. This meticulous setup paves the way for features like error correction and flow control, with TCP automatically adjusting the rate of data transmission based on network conditions, thereby minimizing congestion and ensuring efficient data transfer. Furthermore, TCP's requirement for acknowledgment packets from the receiving end ensures that any data lost during transmission is re-sent, guaranteeing the integrity and sequential integrity of the data stream. Such reliability, however, comes at the cost of speed, as the overhead required for establishing connections, managing packet order, and verifying data integrity inevitably slows down the transmission process, making TCP less suitable for real-time applications where speed is of the essence.
+    
+    In contrast, UDP eschews the connection-oriented approach of TCP in favor of a connectionless communication model, which significantly reduces overhead and accelerates data transmission. Without the need for handshakes, acknowledgments, or error correction mechanisms, UDP enables the rapid sending of data packets, known as datagrams, from one point to another with minimal delay, making it ideal for time-sensitive applications such as live video streaming, online gaming, and voice over IP (VoIP), where occasional data loss is preferable to the delays caused by attempting to correct such errors. This efficiency, however, means that UDP cannot guarantee the delivery, order, or integrity of the data packets it transmits, leaving applications to handle these concerns at a higher layer if necessary. The choice between TCP and UDP ultimately hinges on the specific needs of the application in question; TCP is favored for applications where accuracy and reliability are paramount, requiring the complete and correct delivery of data, such as in web browsing, email, and file transfers, while UDP is chosen for scenarios where speed is crucial and occasional data loss is acceptable.
+    
+    The dichotomy between TCP and UDP highlights the inherent trade-off between reliability and efficiency in network communication. While TCP provides a robust framework for ensuring the accurate and orderly transmission of data, its mechanisms for achieving such reliability introduce a degree of latency and bandwidth overhead that can be prohibitive for applications requiring swift, uninterrupted data flow. UDP, by dispensing with these mechanisms, offers a streamlined alternative that, while lacking in reliability, provides the efficiency necessary for real-time communication. This complementary relationship between TCP and UDP underscores their collective importance to the functioning of the internet, catering to a broad spectrum of communication needs and ensuring that users and applications can select the protocol that best aligns with their requirements for speed, reliability, and data integrity. As networking technology continues to evolve, the roles of TCP and UDP remain fundamentally unchanged, testament to their enduring relevance in the ever-expanding domain of network communication, balancing the scales of efficiency and reliability to meet the diverse demands of the digital age.</p>
+</div>
+
+  <script src="demo.js"></script>
+</body>
+</html>
