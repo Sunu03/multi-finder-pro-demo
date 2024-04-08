@@ -108,14 +108,14 @@ Include the styles from content.css
   /* Additional styles for the demo site */
   #extension-container {
     position: fixed;
-    top: 20px;
+    top: 50px;
     right: 20px;
     width: 400px;
     height: 600px;
     background-color: #161821;
     color: #ffffff;
     border-radius: 10px;
-    padding: 10px;
+    padding: 13px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 9999;
     overflow: hidden;
@@ -123,19 +123,32 @@ Include the styles from content.css
   
   #mainContent,
   #folderList {
-  height: calc(100% - 100px);
+  height: calc(100% - 70px);
   overflow-y: auto;
 }
 
-  .custom-scroll,#folderList,#mainContent::-webkit-scrollbar {
+  .custom-scroll,#mainContent::-webkit-scrollbar {
     width: 5px;
   }
   
-  .custom-scroll,#folderList,#mainContent::-webkit-scrollbar-track {
+  .custom-scroll,#mainContent::-webkit-scrollbar-track {
     background-color: #0f0e0f;
   }
   
-  .custom-scroll,#folderList,#mainContent::-webkit-scrollbar-thumb {
+  .custom-scroll,#mainContent::-webkit-scrollbar-thumb {
+    background-color: #716577;
+    border-radius: 10px;
+  }
+
+  #folderList::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  #folderList::-webkit-scrollbar-track {
+    background-color: #0f0e0f;
+  }
+  
+  #folderList::-webkit-scrollbar-thumb {
     background-color: #716577;
     border-radius: 10px;
   }

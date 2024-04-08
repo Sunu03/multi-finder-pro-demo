@@ -807,3 +807,27 @@ document.getElementById('displayExtension').addEventListener('click',toggleExten
 
 
 });
+
+// Get the copy button and the text to be copied
+const copyBtn = document.querySelector('.copy-btn');
+const textToCopy = copyBtn.previousElementSibling.textContent;
+
+// Add a click event listener to the copy button
+copyBtn.addEventListener('click', () => {
+  // Create a temporary textarea element to copy the text
+  const tempTextArea = document.createElement('textarea');
+  tempTextArea.value = textToCopy;
+  document.body.appendChild(tempTextArea);
+  tempTextArea.select();
+
+  try {
+    // Copy the text to the clipboard
+    document.execCommand('copy');
+    console.log('Text copied to clipboard');
+  } catch (err) {
+    console.error('Failed to copy text:', err);
+  }
+
+  // Remove the temporary textarea element
+  document.body.removeChild(tempTextArea);
+});
