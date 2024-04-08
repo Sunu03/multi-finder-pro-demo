@@ -151,6 +151,11 @@ function performMainSearch() {
   const searchInput = document.getElementById('mainSearch');
   const searchWords = searchInput.value.split(',').map(word => word.trim());
 
+  const selectedWordsInput = document.getElementById('selectedWords');
+  const selectedWords = JSON.parse(selectedWordsInput.value);
+
+  const allWords = [...searchWords, ...selectedWords.map(selectedWord => selectedWord.word)];
+
   clearHighlights();
   currentPosition = {};
 
@@ -359,6 +364,242 @@ function toggleFolderList() {
     }
   }
 
+  function saveWord() {
+    const wordInput = document.getElementById('wordInput');
+    const folderInput = document.getElementById('folderInput');
+    const colorInput = document.getElementById('colorInput');
+    const colorHexInput = document.getElementById('colorHexInput');
+  
+    const word = wordInput.value;
+    const folder = folderInput.value;
+    const color = colorInput.value !== '#000000' ? colorInput.value : (colorHexInput.value || getRandomColor());
+  
+    if (word && folder) {
+      const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+      // Check if the word already exists in any folder
+      const isDuplicate = Object.values(savedWords).some(words =>
+        words.some(wordObj => wordObj.word === word)
+      );
+  
+      if (isDuplicate) {
+        alert('This word already exists in the saved words.');
+        return;
+      }
+  
+      if (!savedWords[folder]) {
+        savedWords[folder] = [];
+      }
+  
+      savedWords[folder].push({ word, color });
+  
+      localStorage.setItem('savedWords', JSON.stringify(savedWords));
+  
+      wordInput.value = '';
+      folderInput.value = '';
+      colorInput.value = '#000000';
+      colorHexInput.value = '';
+  
+      displaySavedWords();
+    }
+  }
+
+  function displaySavedWords() {
+    const wordsContainer = document.getElementById('wordsContainer');
+    wordsContainer.innerHTML = '';
+  
+    const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+    for (const folder in savedWords) {
+      const folderDiv = document.createElement('div');
+      folderDiv.classList.add('folder', 'mb-4', 'rounded-lg');
+      folderDiv.style.backgroundColor = '#282839';
+      folderDiv.style.padding = '10px';
+  
+      const folderTitle = document.createElement('h4');
+      folderTitle.classList.add('text-lg', 'font-bold', 'mb-2');
+      folderTitle.textContent = folder;
+      folderDiv.appendChild(folderTitle);
+  
+      const wordList = document.createElement('ul');
+      wordList.classList.add('space-y-2');
+  
+      savedWords[folder].forEach(wordObj => {
+        const wordListItem = createWordListItem(wordObj, folder);
+        wordList.appendChild(wordListItem);
+      });
+  
+      folderDiv.appendChild(wordList);
+      wordsContainer.appendChild(folderDiv);
+    }
+  }
+
+  function createWordListItem(wordObj, folder) {
+    const wordListItem = document.createElement('li');
+    wordListItem.classList.add('flex', 'items-center', 'justify-between', 'p-2', 'rounded', 'shadow');
+    wordListItem.style.backgroundColor = wordObj.color;
+  
+    const checkboxContainer = document.createElement('div');
+    checkboxContainer.classList.add('checkbox-container', 'flex', 'items-center');
+  
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('mr-2');
+    checkbox.dataset.word = wordObj.word;
+    checkbox.dataset.color = wordObj.color;
+    checkbox.addEventListener('change', () => {
+      toggleSelectedWord(wordListItem, wordObj.word, wordObj.color);
+    });
+    checkboxContainer.appendChild(checkbox);
+  
+    const wordSpan = document.createElement('span');
+    wordSpan.textContent = wordObj.word;
+    wordSpan.style.color = 'white';
+    wordSpan.style.fontSize = '13px';
+    wordSpan.style.fontWeight = 'bold';
+    wordSpan.style.textShadow = '#000 0px 0px 10px';
+    checkboxContainer.appendChild(wordSpan);
+  
+    wordListItem.appendChild(checkboxContainer);
+  
+    const buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('flex', 'space-x-2');
+  
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.classList.add('bg-gray-800', 'hover:bg-gray-900', 'text-white', 'px-2', 'py-1', 'rounded');
+    editButton.addEventListener('click', () => {
+      openEditWordPopup(folder, wordObj);
+    });
+    buttonContainer.appendChild(editButton);
+  
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'x';
+    removeButton.classList.add('text-red-400', 'font-bold', 'hover:text-red-600', 'px-2', 'py-1', 'rounded');
+    removeButton.addEventListener('click', () => {
+      removeWord(folder, wordObj.word);
+    });
+    buttonContainer.appendChild(removeButton);
+  
+    wordListItem.appendChild(buttonContainer);
+  
+    return wordListItem;
+  }
+
+  function openEditWordPopup(folder, wordObj) {
+    const editWordPopup = document.getElementById('editWordPopup');
+    const editWordInput = document.getElementById('editWordInput');
+    const editColorInput = document.getElementById('editColorInput');
+    const editFolderInput = document.getElementById('editFolderInput');
+    const editTagsInput = document.getElementById('editTagsInput');
+    const editNoteInput = document.getElementById('editNoteInput');
+    const saveEditButton = document.getElementById('saveEditButton');
+    const cancelEditButton = document.getElementById('cancelEditButton');
+  
+    editWordInput.value = wordObj.word;
+    editColorInput.value = wordObj.color;
+    editFolderInput.value = folder;
+    editTagsInput.value = wordObj.tags || '';
+    editNoteInput.value = wordObj.note || '';
+  
+    saveEditButton.addEventListener('click', () => {
+      const newColor = editColorInput.value;
+      const newFolder = editFolderInput.value;
+      const newTags = editTagsInput.value.split(',').map(tag => tag.trim());
+      const newNote = editNoteInput.value;
+  
+      const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+      // Remove the word from the current folder
+      savedWords[folder] = savedWords[folder].filter(word => word.word !== wordObj.word);
+  
+      // Check if the current folder is empty and delete it
+      if (savedWords[folder].length === 0) {
+        delete savedWords[folder];
+      }
+  
+      // Add the updated word to the new folder
+      if (!savedWords[newFolder]) {
+        savedWords[newFolder] = [];
+      }
+      savedWords[newFolder].push({
+        word: wordObj.word,
+        color: newColor,
+        tags: newTags,
+        note: newNote
+      });
+  
+      localStorage.setItem('savedWords', JSON.stringify(savedWords));
+  
+      displaySavedWords();
+      editWordPopup.classList.add('hidden');
+    });
+  
+    cancelEditButton.addEventListener('click', () => {
+      editWordPopup.classList.add('hidden');
+    });
+  
+    editWordPopup.classList.remove('hidden');
+  }
+  
+  function removeWord(folder, wordToRemove) {
+    const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+    if (savedWords[folder]) {
+      savedWords[folder] = savedWords[folder].filter(wordObj => wordObj.word !== wordToRemove);
+  
+      if (savedWords[folder].length === 0) {
+        delete savedWords[folder];
+      }
+  
+      localStorage.setItem('savedWords', JSON.stringify(savedWords));
+      displaySavedWords();
+    }
+  }
+
+  function toggleSelectedWord(wordListItem, word, color) {
+    const selectedWordsInput = document.getElementById('selectedWords');
+    const selectedWords = JSON.parse(selectedWordsInput.value);
+    const wordIndex = selectedWords.findIndex(selectedWord => selectedWord.word === word && selectedWord.color === color);
+  
+    if (wordIndex === -1) {
+      selectedWords.push({ word, color });
+      wordListItem.classList.add('selected');
+    } else {
+      selectedWords.splice(wordIndex, 1);
+      wordListItem.classList.remove('selected');
+    }
+  
+    selectedWordsInput.value = JSON.stringify(selectedWords);
+  }
+
+  function handleSelectAllClick() {
+    const wordsContainer = document.getElementById('wordsContainer');
+    const wordCheckboxes = wordsContainer.querySelectorAll('input[type="checkbox"]');
+    const selectedWordsInput = document.getElementById('selectedWords');
+    const selectedWords = [];
+  
+    wordCheckboxes.forEach(checkbox => {
+      checkbox.checked = true;
+      const word = checkbox.dataset.word;
+      const color = checkbox.dataset.color;
+      selectedWords.push({ word, color });
+    });
+  
+    selectedWordsInput.value = JSON.stringify(selectedWords);
+  }
+  
+  function handleClearSelectedClick() {
+    const selectedWordsInput = document.getElementById('selectedWords');
+    selectedWordsInput.value = '[]';
+  
+    const wordsContainer = document.getElementById('wordsContainer');
+    const wordCheckboxes = wordsContainer.querySelectorAll('input[type="checkbox"]');
+    wordCheckboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+  }
+
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('mainSearch');
   const searchButton = document.getElementById('mainSearchBtn');
@@ -366,6 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const partialSearchButton = document.getElementById('partialSearchBtn');
   const hamburgerMenu = document.getElementById('hamburgerMenu');
 
+  displaySavedWords();
   restoreState();
 
 
@@ -386,3 +628,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+document.getElementById('addWordButton').addEventListener('click', saveWord);
+document.getElementById('addWordSection').addEventListener('click', () => {
+  document.getElementById('addWordContent').classList.toggle('hidden');
+  document.getElementById('addWordToggle').classList.toggle('collapsed');
+  displaySavedWords();
+});
+document.getElementById('wordSearchInput').addEventListener('input', searchSavedWords);
+document.getElementById('selectAllButton').addEventListener('click', handleSelectAllClick);
+document.getElementById('clearSelectedButton').addEventListener('click', handleClearSelectedClick);
