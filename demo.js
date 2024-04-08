@@ -147,6 +147,7 @@ function clearHighlights() {
   console.log(`Cleared ${highlightedElements.length} highlights.`);
 }
 
+
 function performMainSearch() {
   const searchInput = document.getElementById('mainSearch');
   const searchWords = searchInput.value.split(',').map(word => word.trim());
@@ -172,8 +173,9 @@ function performMainSearch() {
 
   let colorIndex = 0;
 
-  const wordsToHighlight = searchWords.map(word => {
-    const color = colorIndex < classicColors.length ? classicColors[colorIndex] : getRandomColor();
+  const wordsToHighlight = allWords.map(word => {
+    const selectedWord = selectedWords.find(selectedWord => selectedWord.word === word);
+    const color = selectedWord ? selectedWord.color : (colorIndex < classicColors.length ? classicColors[colorIndex] : getRandomColor());
     colorIndex++;
     return { word, color };
   });
@@ -198,6 +200,59 @@ function performMainSearch() {
   });
 }
 
+function performPartialSearch() {
+  const searchInput = document.getElementById('mainSearch');
+  const searchWords = searchInput.value.split(',').map(word => word.trim());
+
+  const selectedWordsInput = document.getElementById('selectedWords');
+  const selectedWords = JSON.parse(selectedWordsInput.value);
+
+  const allWords = [...searchWords, ...selectedWords.map(selectedWord => selectedWord.word)];
+
+  clearHighlights();
+  currentPosition = {};
+
+  const classicColors = [
+    '#FFFF77',
+    '#7777FF',
+    '#77FF92',
+    '#C977FF',
+    '#77FFE4',
+    '#77C9FF',
+    '#FF7792',
+    '#FFAE77'
+  ];
+
+  let colorIndex = 0;
+
+  const wordsToHighlight = allWords.map(word => {
+    const selectedWord = selectedWords.find(selectedWord => selectedWord.word === word);
+    const color = selectedWord ? selectedWord.color : (colorIndex < classicColors.length ? classicColors[colorIndex] : getRandomColor());
+    colorIndex++;
+    return { word, color };
+  });
+
+  const results = [];
+  for (const { word, color } of wordsToHighlight) {
+    if (word) {
+      const count = highlightWordPartial(word, color);
+      results.push({
+        word,
+        color,
+        count
+      });
+    }
+  }
+
+  displayResults(results);
+  saveState();
+
+  results.forEach(result => {
+    currentPosition[result.word] = 0;
+  });
+}
+
+
 function displayResults(results) {
   const resultsContainer = document.getElementById('resultsContainer');
   resultsContainer.innerHTML = '';
@@ -205,6 +260,7 @@ function displayResults(results) {
   for (const result of results) {
     const card = document.createElement('div');
     card.className = 'card mb-2 flex justify-between items-center rounded shadow p-1';
+    card.style.height = '50px';
     card.style.backgroundColor = result.color;
     card.style.border = '1px solid #8492c3';
     card.dataset.word = result.word;
@@ -271,8 +327,10 @@ function navigateToWord(word, direction = 0) {
   const highlights = document.querySelectorAll(`span.multiwordfinder-highlight[data-word="${word}"]`);
   if (highlights.length === 0) return;
 
+  // Remove the 'selected-word' and 'current-word' classes from all highlights
   highlights.forEach(highlight => {
     highlight.classList.remove('selected-word');
+    highlight.classList.remove('current-word');
   });
 
   currentPosition[word] = (currentPosition[word] + highlights.length + direction) % highlights.length;
@@ -280,6 +338,7 @@ function navigateToWord(word, direction = 0) {
   const targetElement = highlights[currentPosition[word]];
   targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
+  // Add the 'selected-word' and 'current-word' classes to the target element
   targetElement.classList.add('selected-word');
   targetElement.classList.add('current-word');
 
@@ -495,6 +554,7 @@ function toggleFolderList() {
     const editNoteInput = document.getElementById('editNoteInput');
     const saveEditButton = document.getElementById('saveEditButton');
     const cancelEditButton = document.getElementById('cancelEditButton');
+    editWordPopup.style.position ='absolute';
   
     editWordInput.value = wordObj.word;
     editColorInput.value = wordObj.color;
@@ -542,6 +602,34 @@ function toggleFolderList() {
     editWordPopup.classList.remove('hidden');
   }
   
+  function searchSavedWords(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const wordsContainer = document.getElementById('wordsContainer');
+    const folderDivs = wordsContainer.querySelectorAll('.folder');
+  
+    folderDivs.forEach(folderDiv => {
+      const wordItems = folderDiv.querySelectorAll('li');
+      let folderHasMatch = false;
+  
+      wordItems.forEach(wordItem => {
+        const wordSpan = wordItem.querySelector('span');
+        const word = wordSpan.textContent.toLowerCase();
+        if (word.startsWith(searchTerm)) {
+          wordItem.style.display = 'flex';
+          folderHasMatch = true;
+        } else {
+          wordItem.style.display = 'none';
+        }
+      });
+  
+      if (folderHasMatch) {
+        folderDiv.style.display = 'block';
+      } else {
+        folderDiv.style.display = 'none';
+      }
+    });
+  }
+
   function removeWord(folder, wordToRemove) {
     const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
   
@@ -575,15 +663,18 @@ function toggleFolderList() {
 
   function handleSelectAllClick() {
     const wordsContainer = document.getElementById('wordsContainer');
-    const wordCheckboxes = wordsContainer.querySelectorAll('input[type="checkbox"]');
+    const visibleWordItems = wordsContainer.querySelectorAll('.folder:not([style*="display: none"]) li:not([style*="display: none"])');
     const selectedWordsInput = document.getElementById('selectedWords');
-    const selectedWords = [];
+    const selectedWords = JSON.parse(selectedWordsInput.value);
   
-    wordCheckboxes.forEach(checkbox => {
+    visibleWordItems.forEach(wordItem => {
+      const checkbox = wordItem.querySelector('input[type="checkbox"]');
       checkbox.checked = true;
       const word = checkbox.dataset.word;
       const color = checkbox.dataset.color;
-      selectedWords.push({ word, color });
+      if (!selectedWords.some(selectedWord => selectedWord.word === word && selectedWord.color === color)) {
+        selectedWords.push({ word, color });
+      }
     });
   
     selectedWordsInput.value = JSON.stringify(selectedWords);
@@ -600,16 +691,61 @@ function toggleFolderList() {
     });
   }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('mainSearch');
-  const searchButton = document.getElementById('mainSearchBtn');
-  const clearAllButton = document.getElementById('clearAllBtn');
-  const partialSearchButton = document.getElementById('partialSearchBtn');
-  const hamburgerMenu = document.getElementById('hamburgerMenu');
-
-  displaySavedWords();
-  restoreState();
-
+  function performFolderSearch() {
+    const selectedWordsInput = document.getElementById('selectedWords');
+    const selectedWords = JSON.parse(selectedWordsInput.value);
+  
+    clearHighlights();
+    currentPosition = {};
+  
+    const wordsToHighlight = selectedWords;
+  
+    const results = [];
+    for (const { word, color } of wordsToHighlight) {
+      if (word) {
+        const count = highlightWord(word, color);
+        results.push({
+          word,
+          color,
+          count
+        });
+      }
+    }
+  
+    displayResults(results);
+    saveState();
+  
+    results.forEach(result => {
+      currentPosition[result.word] = 0;
+    });
+  }
+  
+  function folderClearAll() {
+    const selectedWordsInput = document.getElementById('selectedWords');
+    selectedWordsInput.value = '[]';
+  
+    const wordsContainer = document.getElementById('wordsContainer');
+    const wordCheckboxes = wordsContainer.querySelectorAll('input[type="checkbox"]');
+    wordCheckboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+  
+    clearHighlights();
+    document.getElementById('resultsContainer').innerHTML = '';
+    currentPosition = {};
+    saveState();
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('mainSearch');
+    const searchButton = document.getElementById('mainSearchBtn');
+    const clearAllButton = document.getElementById('clearAllBtn');
+    const partialSearchButton = document.getElementById('partialSearchBtn');
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const folderSearchButton = document.getElementById('folderSearchBtn');
+    const folderClearAllButton = document.getElementById('folderClearAllBtn');
+  
+    displaySavedWords();
+    restoreState();
 
   searchButton.addEventListener('click', performMainSearch);
   clearAllButton.addEventListener('click', () => {
@@ -619,6 +755,8 @@ document.addEventListener('DOMContentLoaded', function() {
     currentPosition = {};
     saveState();
   });
+  folderSearchButton.addEventListener('click', performFolderSearch);
+  folderClearAllButton.addEventListener('click', folderClearAll);
   partialSearchButton.addEventListener('click', performPartialSearch);
   hamburgerMenu.addEventListener('click', toggleFolderList);
 
@@ -627,9 +765,9 @@ document.addEventListener('DOMContentLoaded', function() {
       performMainSearch();
     }
   });
-});
-document.getElementById('addWordButton').addEventListener('click', saveWord);
-document.getElementById('addWordSection').addEventListener('click', () => {
+  document.getElementById('wordSearchInput').addEventListener('input', searchSavedWords);
+  document.getElementById('addWordButton').addEventListener('click', saveWord);
+  document.getElementById('addWordSection').addEventListener('click', () => {
   document.getElementById('addWordContent').classList.toggle('hidden');
   document.getElementById('addWordToggle').classList.toggle('collapsed');
   displaySavedWords();
@@ -637,3 +775,8 @@ document.getElementById('addWordSection').addEventListener('click', () => {
 document.getElementById('wordSearchInput').addEventListener('input', searchSavedWords);
 document.getElementById('selectAllButton').addEventListener('click', handleSelectAllClick);
 document.getElementById('clearSelectedButton').addEventListener('click', handleClearSelectedClick);
+
+document.getElementById('displayExtension').addEventListener('click',toggledExtension);
+
+
+});
