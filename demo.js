@@ -468,7 +468,8 @@ function toggleFolderList() {
     wordsContainer.innerHTML = '';
   
     const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
-  
+    
+    
     for (const folder in savedWords) {
       const folderDiv = document.createElement('div');
       folderDiv.classList.add('folder', 'mb-4', 'rounded-lg');
@@ -661,6 +662,26 @@ function toggleFolderList() {
     selectedWordsInput.value = JSON.stringify(selectedWords);
   }
 
+  function saveWordToQuickSave(word, color, plusButton) {
+    const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+    if (!savedWords['Quick save']) {
+      savedWords['Quick save'] = [];
+    }
+  
+    const existingWord = savedWords['Quick save'].find(wordObj => wordObj.word === word);
+  
+    if (!existingWord) {
+      savedWords['Quick save'].push({ word, color });
+  
+      localStorage.setItem('savedWords', JSON.stringify(savedWords));
+  
+      displaySavedWords();
+      showNotification(`"${word}" added to Quick save`);
+      plusButton.remove();
+    }
+  }
+
   function handleSelectAllClick() {
     const wordsContainer = document.getElementById('wordsContainer');
     const visibleWordItems = wordsContainer.querySelectorAll('.folder:not([style*="display: none"]) li:not([style*="display: none"])');
@@ -735,6 +756,12 @@ function toggleFolderList() {
     currentPosition = {};
     saveState();
   }
+
+  function toggleExtensionContainer() {
+    const extensionContainer = document.getElementById('extension-container');
+    extensionContainer.classList.toggle('hidden');
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('mainSearch');
     const searchButton = document.getElementById('mainSearchBtn');
@@ -776,7 +803,7 @@ document.getElementById('wordSearchInput').addEventListener('input', searchSaved
 document.getElementById('selectAllButton').addEventListener('click', handleSelectAllClick);
 document.getElementById('clearSelectedButton').addEventListener('click', handleClearSelectedClick);
 
-document.getElementById('displayExtension').addEventListener('click',toggledExtension);
+document.getElementById('displayExtension').addEventListener('click',toggleExtensionContainer);
 
 
 });

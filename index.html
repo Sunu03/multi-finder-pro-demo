@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="demo.css">
 </head>
 <body>
-  <img id="displayExtension" src="./icon.png"class="cursor-pointer p-1 rounded hover:bg-gray-200" style="height:40px; position:sticky; top: 5px; left:95%; justify-items: right;"/>
   <div id="extension-container" class="" style="background-image: url('./bg.jpg');">
     <div class="w-full h-12 flex justify-between items-center">
       <div class="flex items-center">
@@ -105,26 +104,26 @@
         </div>
       </div>
   </div>
-
+  
+  <img id="displayExtension" src="./icon.png"class="cursor-pointer p-1 rounded bg-gray-200 hover:bg-blue-300" style="height:40px; position:sticky; top: 5px; left:98%; display:inline-block;"/>
   <div id="test-content">
     <div class="flex items-center mb-5">
     <img src="./icon.png"style="height:50px;"/>
     <h1 class="ml-3
     font-bold" style="font-size: 30px;"> Multi-Finder Pro Demo</h1>
     </div>
-    <p class="mt-3 rounded-lg" style="margin-right: 50%;  padding: 10px; background-color: bisque; ">This is not a 1-1 replication of the real Multi-Finder Pro extension but this should give you an idea of how it looks and works!</p>
+    <p class="mt-3 rounded-lg" style="margin-right: 50%;  padding: 10px; background-color: bisque; ">This is not a 1-1 replication of the real Multi-Finder Pro extension but this should give you an idea of how it looks and works!<br/> Hit the
+      <img class="ml-1"src="./icon.png"style="height:25px; display:inline"/>
+      icon on the top right to toggle extension display.</p>
     <p class="mt-3 rounded-lg" style="margin-right: 50%; padding: 10px; background-color: rgb(196, 231, 255); ">Try copying the text below inside the main search and click "Partial Match": <span style="background-color: rgb(168, 73, 73); color:aliceblue; border-radius: 5px; padding: 2px;">a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,-</span></p>
-  </br>
-    <h2 class="font-bold mb-2 text-xl"> Networking:</h2>
- <hr/>
- <br/>
+  <h2 class="font-bold mt-3 mb-5 text-2xl"> Sample Text below:</h2> 
+<div class="bg-gray-200 p-3 rounded-lg">
+  <h3 class="font-bold mb-5 text-xl"> Networking:</h3>
  <p>Networking, at its core, represents the intricate tapestry of protocols, devices, and methodologies that facilitate communication between computers, devices, and users over distances both short and vast, acting as the backbone of the modern digital world. It begins with the fundamental distinction between Local Area Networks (LANs), which connect devices in close proximity—such as within a home, office, or school—to enable high-speed communication and resource sharing, and Wide Area Networks (WANs), which cover broader geographic areas, often using leased telecommunication lines to connect disparate LANs, thereby forming the vast, interconnected web of networks known as the internet. At the heart of these networks lie routers and switches, devices tasked with the critical roles of directing traffic and managing connections; routers, for instance, determine the optimal path for data packets to traverse the complex maze of interconnected networks, ensuring they reach their intended destination, while switches focus on facilitating communication within a single network, directing packets between devices on the same LAN to maintain efficient, localized data exchange. Integral to the operation of these networks are Network Interface Cards (NICs), which provide the physical interface for devices to connect to a network, enabling them to send and receive data over wired Ethernet or wireless Wi-Fi connections. Underpinning the functionality of these networks are a multitude of protocols, each designed for specific tasks; for instance, the Internet Protocol (IP) assigns unique addresses to devices, facilitating accurate packet delivery across the global network, while the Transmission Control Protocol (TCP) ensures reliable data transmission, verifying that packets arrive intact and in order through mechanisms like error checking and flow control. Among the most ubiquitous protocols is the Hypertext Transfer Protocol (HTTP), which governs the exchange of data on the World Wide Web, making possible the seamless access to websites and online resources that has become integral to daily life and commerce. Meanwhile, its secure counterpart, HTTPS, adds a layer of encryption to protect data in transit, safeguarding against interception and ensuring the privacy and integrity of the information exchanged. This intricate ecosystem of networks, devices, and protocols not only facilitates the vast majority of human communication and data exchange today but also continuously evolves, driven by advancements in technology and an ever-increasing demand for faster, more secure, and more reliable connectivity, underscoring the critical importance of networking in shaping the future of our digital, interconnected world.
 
 This continuous narrative aims to encapsulate the vast and complex domain of networking into a singular, albeit lengthy, paragraph, touching upon its essential components and their interrelations in supporting the flow of digital information across the globe.</p>
 <br/>
-<h2 class="font-bold text-xl mb-2"> TCP vs UDP:</h2>
-<hr/>
-<br/>
+<h3 class="font-bold text-xl mb-5"> TCP vs UDP:</h3>
 <p>
     When discussing the foundational elements of network communication, two protocols often come to the forefront due to their pivotal roles in data transmission across the internet: Transmission Control Protocol (TCP) and User Datagram Protocol (UDP). Both residing in the transport layer of the OSI model, TCP and UDP serve as crucial conduits for the vast array of network communications that enable the internet, yet they do so in fundamentally different ways, each tailored to specific types of data transmission needs, thereby reflecting a balance between efficiency and reliability in network communication.
     
@@ -133,7 +132,115 @@ This continuous narrative aims to encapsulate the vast and complex domain of net
     In contrast, UDP eschews the connection-oriented approach of TCP in favor of a connectionless communication model, which significantly reduces overhead and accelerates data transmission. Without the need for handshakes, acknowledgments, or error correction mechanisms, UDP enables the rapid sending of data packets, known as datagrams, from one point to another with minimal delay, making it ideal for time-sensitive applications such as live video streaming, online gaming, and voice over IP (VoIP), where occasional data loss is preferable to the delays caused by attempting to correct such errors. This efficiency, however, means that UDP cannot guarantee the delivery, order, or integrity of the data packets it transmits, leaving applications to handle these concerns at a higher layer if necessary. The choice between TCP and UDP ultimately hinges on the specific needs of the application in question; TCP is favored for applications where accuracy and reliability are paramount, requiring the complete and correct delivery of data, such as in web browsing, email, and file transfers, while UDP is chosen for scenarios where speed is crucial and occasional data loss is acceptable.
     
     The dichotomy between TCP and UDP highlights the inherent trade-off between reliability and efficiency in network communication. While TCP provides a robust framework for ensuring the accurate and orderly transmission of data, its mechanisms for achieving such reliability introduce a degree of latency and bandwidth overhead that can be prohibitive for applications requiring swift, uninterrupted data flow. UDP, by dispensing with these mechanisms, offers a streamlined alternative that, while lacking in reliability, provides the efficiency necessary for real-time communication. This complementary relationship between TCP and UDP underscores their collective importance to the functioning of the internet, catering to a broad spectrum of communication needs and ensuring that users and applications can select the protocol that best aligns with their requirements for speed, reliability, and data integrity. As networking technology continues to evolve, the roles of TCP and UDP remain fundamentally unchanged, testament to their enduring relevance in the ever-expanding domain of network communication, balancing the scales of efficiency and reliability to meet the diverse demands of the digital age.</p>
+<h3 class="font-bold text-xl mt-8 mb-2"> Log example:</h3>
+<div style="display: inline-flex;">
+<div>
+  <p>This log below is a made up system log for a router.</p>
+  <p class="bg-gray-400 p-3 rounded-lg mr-3"><code>Apr  8 14:21:12 router01 %SEC_LOGIN-4-LOGIN_FAILED: Login failed [user.info 10.0.0.50] for user 'admin' from 192.168.1.100 <br>
+
+    Apr  8 14:22:31 router01 %SEC_LOGIN-5-LOGIN_FAILED: Login failed [user.info 0.0.0.0] for user 'admin' from 192.168.1.100<br>
+    
+    Apr  8 14:23:45 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up  <br>
+    
+    Apr  8 14:24:03 router01 %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up<br>
+    
+    Apr  8 14:24:10 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to down<br>
+    
+    Apr  8 14:24:15 router01 %LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down<br>
+    
+    Apr  8 14:24:18 router01 %DOT11-5-ASSOC: Interface Dot11Radio1, Received new 802.11 association from c0:ff:ee:11:22:33<br>
+    Apr  8 14:24:18 router01 %DOT11-5-ASSOC: Station c0:ff:ee:11:22:33 has joined wlan-security-3<br>
+    
+    Apr  8 14:24:19 router01 %DOT11-4-WPA: Initiating WPA/WPA2 handshake for c0:ff:ee:11:22:33 on wlan-security-3<br>
+    
+    Apr  8 14:24:19 router01 %DOT11-4-WPA2_HANDSHAKE_START: Initiating WPA2 4-way handshake for c0:ff:ee:11:22:33 on wlan-security-3<br>
+    
+    Apr  8 14:24:19 router01 %AUTHINIT-SP-5-MACAUTH_SUCCESS: Mac authentication passed for c0:ff:ee:11:22:33 on wlan-security-3 <br>
+    
+    Apr  8 14:24:19 router01 %AUTHINIT_MSG_SEND-6-MSG_SUCC: [c0:ff:ee:11:22:33] Client associated, success. (Type=1, Status=1, Status=0)<br>
+    
+    Apr  8 14:24:20 router01 %AUTHINIT-SP-5-AUTH_SUCCESS: Authentication successful for client c0:ff:ee:11:22:33 on wlan-security-3<br>
+    Apr  8 14:24:20 router01 %CAPWAP-3-AC_CONTROLLED_DEASSOC: Deauthenticating (:c0:ff:ee:11:22:33) on AP 58fb.acbd.f880 and CAPWAP_CONTROLLED deauthentication<br>
+    
+    Apr  8 14:24:20 router01 %AUTHINIT-SC-5-KEYMISS: Key update missed for snooping filter c0:ff:ee:11:22:33 on wlan-security-3  <br>
+    
+    Apr  8 14:24:20 router01 %DHCP-6-ADDRESS_ASSIGN: Interface BVI1 assigned client c0:ff:ee:11:22:33 address 192.168.10.115 for 86400 seconds<br>
+    
+    Apr  8 14:24:22 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface Dot11Radio1, changed state to up<br>
+    
+    Apr  8 14:24:25 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/3, changed state to up<br>
+    
+    Apr  8 14:24:30 router01 %LINK-3-UPDOWN: Interface GigabitEthernet0/3, changed state to up  <br>
+    
+    Apr  8 14:24:32 router01 %LINK-5-CHANGED: Interface Dot11Radio0, changed state to administratively down<br>
+    
+    Apr  8 14:24:35 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface Dot11Radio0, changed state to down<br>
+    
+    Apr  8 14:24:38 router01 %DOT11-5-DISASSOC: Station c0:ff:ee:11:22:33 has left wlan-security-3<br>
+    
+    Apr  8 14:24:39 router01 %DHCP-6-ADDRESS_FREE: Interface BVI1 freed 192.168.10.115 to client c0:ff:ee:11:22:33<br>
+    
+    Apr  8 14:24:45 router01 %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user.info 10.10.10.1] user 'admin' <br>
+    
+    Apr  8 14:25:10 router01 %CRYPTO-6-IKMP_INBOUND_MM_FAIL: Failed processing inbound MM at MM_AWAIT_MSG_HDR, attempted to include bogus payloads<br>
+    
+    Apr  8 14:25:18 router01 %LINK-3-UPDOWN: Interface Tunnel0, changed state to up<br>
+    
+    Apr  8 14:25:20 router01 %LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel0, changed state to up<br>
+    
+    Apr  8 14:25:35 router01 %CRYPTO-4-IKE_INITIATE_FAILED: Failed to initiate IKE_SA negotiation via 192.168.1.1 to 172.16.2.2<br>
+    
+  Apr  8 14:26:05 router01 %CRYPTO-5-IKMP_INBOUND_PKT_ATTACK: IKE packet dropped - possible decryption error or attack</code></p>
 </div>
+<div>
+  <p>This log below is a made up kernal log for a router.</p>
+  <p class="bg-gray-400 p-3 rounded-lg">Apr  8 14:21:05 kernel: [   16.839439] EXT4-fs (sda1): re-mounted. Opts: errors=remount-ro<br>
+  Apr  8 14:21:15 kernel: [   26.844623] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)<br>
+  Apr  8 14:21:20 kernel: [   31.777620] ip_tables: (C) 2000-2006 Netfilter Core Team<br>
+  Apr  8 14:21:23 kernel: [   34.208409] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready<br>
+  Apr  8 14:21:25 kernel: [   36.330271] r8169 0000:00:1c.3: eth0: link down<br>
+  Apr  8 14:21:27 kernel: [   38.339927] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready<br>
+  Apr  8 14:21:30 kernel: [   41.372038] r8169 0000:00:1c.3: eth0: link up<br>
+  Apr  8 14:21:32 kernel: [   43.383216] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready<br>
+  Apr  8 14:21:40 kernel: [   51.432508] EXT4-fs (sda1): re-mounted. Opts: errors=remount-ro<br>
+  Apr  8 14:22:05 kernel: [   76.633964] ata1.00: exception Emask 0x10 SAct 0x0 SErr 0x4000000 action 0x6 frozen<br>
+  Apr  8 14:22:09 kernel: [   80.334201] ata1.00: cmd c8/00:08:a0:fb:eb/00:00:00:00:00/e2 tag 0 pio 512 in<br>
+  Apr  8 14:22:11 kernel: [   82.334347]          res 51/40:03:ac:fb:eb/00:00:00:00:00/a0 Emask 0x10 (ATA bus error)<br>
+  Apr  8 14:22:13 kernel: [   84.336541] ata1.00: status: { DRDY ERR }<br>
+  Apr  8 14:22:16 kernel: [   87.336642] ata1.00: error: { UNC }<br>
+  Apr  8 14:22:18 kernel: [   89.401365] ata1: hard resetting link<br>
+  Apr  8 14:22:22 kernel: [   93.448602] ata1: SATA link up 3.0 Gbps (SStatus 123 SControl 300)<br>
+  Apr  8 14:22:24 kernel: [   95.454388] ata1.00: configured for UDMA/100<br>
+  Apr  8 14:22:28 kernel: [   99.464512] usb 1-6: new high-speed USB device number 4 using ehci_hcd<br>
+  Apr  8 14:22:30 kernel: [  101.534203] usb 1-6: New USB device found, idVendor=0781, idProduct=5567<br>
+  Apr  8 14:22:35 kernel: [  106.540305] usb 1-6: New USB device strings: Mfr=1, Product=2, SerialNumber=3<br>
+  Apr  8 14:22:38 kernel: [  109.556401] usb 1-6: Product: USB PnP Audio Device<br>
+  Apr  8 14:22:42 kernel: [  113.568623] usb 1-6: Manufacturer: C-Media Electronics Inc.         <br>
+  Apr  8 14:22:47 kernel: [  118.584725] usb 1-6: SerialNumber: 00000000001A<br>
+  Apr  8 14:22:54 kernel: [  125.620903] audit: type=1400 audit(1493331472.314:2): apparmor="DENIED" operation="open" profile="/usr/sbin/mysqld" name="/proc/1/status" pid=802 comm="mysqld" requested_mask="r" denied_mask="r" fsuid=105 ouid=0<br>
+  Apr  8 14:22:58 kernel: [  129.633045] audit: type=1400 audit(1493331476.326:3): apparmor="DENIED" operation="open" profile="/usr/sbin/mysqld" name="/sys/devices/system/node/" pid=802 comm="mysqld" requested_mask="r" denied_mask="r" fsuid=105 ouid=0<br>
+  Apr  8 14:23:10 kernel: [  141.651121] EXT4-fs (sda1): re-mounted. Opts: errors=remount-ro<br>
+  Apr  8 14:23:22 kernel: [  153.667196] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready<br>
+  Apr  8 14:23:24 kernel: [  155.673280] r8169 0000:00:1c.3: eth0: link up<br>
+  Apr  8 14:23:26 kernel: [  157.681452] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready<br>
+  Apr  8 14:23:35 kernel: [  166.728644] EXT4-fs (sda1): re-mounted. Opts: errors=remount-ro<br>
+  Apr  8 14:23:45 kernel: [  176.733791] end_request: I/O error, dev sda, sector 7654321<br>
+  Apr  8 14:23:50 kernel: [  181.749901] EXT4-fs (sda1): errors=remount-ro<br>
+  Apr  8 14:23:52 kernel: [  183.756026] EXT4-fs (sda1): consecutive error 2, marking fs as valid=0<br>
+  Apr  8 14:23:58 kernel: [  189.772144] EXT4-fs (sda1): unmounted. Opts: errors=remount-ro<br>
+  Apr  8 14:24:08 kernel: [  199.781193] piix4_smbus 0000:00:07.3: SMBus base address uninitialized - upgrade BIOS or use force_addr=0xaddr<br>
+  Apr  8 14:24:18 kernel: [  209.790241] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX<br>
+  Apr  8 14:24:24 kernel: [  215.805360] EXT4-fs error (device sda1): ext4_remount:5531: Abort forced by user<br>
+  Apr  8 14:24:32 kernel: [  223.851554] CPU: 0 PID: 2643 Comm: cksum Tainted: G        U  3.13.0-107-generic #154-Ubuntu<br>
+  Apr  8 14:24:36 kernel: [  227.864704] Pid: 2643, comm: cksum Not tainted 3.13.0-107-generic #154-Ubuntu<br>
+  Apr  8 14:24:39 kernel: [  230.871830] Call Trace:<br>
+  Apr  8 14:24:40 kernel: [  231.873877]  [<c0532606>] ? csum_partial_copy_generic+0x16/0x50<br>
+  Apr  8 14:24:42 kernel: [  233.879020]  [<c0540cf3>] ? mark_buffer_dirty+0x23/0x70<br>
+  Apr  8 14:24:46 kernel: [  237.892169]  [<c05673de>] ? 0x0<br></p>  
+  </div>
+  </div>
+  </div>
+  </div>
 
   <script src="demo.js"></script>
 </body>
