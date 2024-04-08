@@ -42,6 +42,7 @@ function highlightWord(word, color) {
   highlightTextNode(testContent);
 
   return totalCount;
+  updateCustomScrollbarIndicator();
 }
 
 function performPartialSearch() {
@@ -132,6 +133,7 @@ function performPartialSearch() {
     highlightTextNode(testContent);
   
     return totalCount;
+    updateCustomScrollbarIndicator();
   }
 
 function clearHighlights() {
@@ -194,6 +196,7 @@ function performMainSearch() {
 
   displayResults(results);
   saveState();
+  updateCustomScrollbarIndicator();
 
   results.forEach(result => {
     currentPosition[result.word] = 0;
@@ -246,6 +249,7 @@ function performPartialSearch() {
 
   displayResults(results);
   saveState();
+  updateCustomScrollbarIndicator();
 
   results.forEach(result => {
     currentPosition[result.word] = 0;
@@ -787,6 +791,60 @@ function toggleFolderList() {
     extensionContainer.classList.toggle('hidden');
   }
 
+  function updateCustomScrollbarIndicator() {
+    let scrollbarIndicator = document.getElementById('custom-scrollbar-indicator');
+    if (!scrollbarIndicator) {
+      scrollbarIndicator = document.createElement('div');
+      scrollbarIndicator.id = 'custom-scrollbar-indicator';
+      document.body.appendChild(scrollbarIndicator);
+    }
+  
+    // Clear existing markers
+    scrollbarIndicator.innerHTML = '';
+  
+    document.querySelectorAll('.multiwordfinder-highlight').forEach(highlight => {
+      const marker = document.createElement('div');
+      const positionPercentage = (highlight.getBoundingClientRect().top + window.scrollY) / document.body.scrollHeight * 100;
+      const color = highlight.style.backgroundColor;
+  
+      marker.style.cssText = `
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        left: 0;
+        top: ${positionPercentage}%;
+        background-color: ${color};
+      `;
+  
+      scrollbarIndicator.appendChild(marker);
+    });
+  }
+
+    // Get the copy button and the text to be copied
+  const copyBtn = document.querySelector('.copy-btn');
+  const textToCopy = copyBtn.previousElementSibling.textContent;
+
+  // Add a click event listener to the copy button
+  copyBtn.addEventListener('click', () => {
+    // Create a temporary textarea element to copy the text
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = textToCopy;
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+
+    try {
+      // Copy the text to the clipboard
+      document.execCommand('copy');
+      console.log('Text copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+
+    // Remove the temporary textarea element
+    document.body.removeChild(tempTextArea);
+  });
+
+
   document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('mainSearch');
     const searchButton = document.getElementById('mainSearchBtn');
@@ -833,26 +891,3 @@ document.getElementById('displayExtension').addEventListener('click',toggleExten
 
 });
 
-// Get the copy button and the text to be copied
-const copyBtn = document.querySelector('.copy-btn');
-const textToCopy = copyBtn.previousElementSibling.textContent;
-
-// Add a click event listener to the copy button
-copyBtn.addEventListener('click', () => {
-  // Create a temporary textarea element to copy the text
-  const tempTextArea = document.createElement('textarea');
-  tempTextArea.value = textToCopy;
-  document.body.appendChild(tempTextArea);
-  tempTextArea.select();
-
-  try {
-    // Copy the text to the clipboard
-    document.execCommand('copy');
-    console.log('Text copied to clipboard');
-  } catch (err) {
-    console.error('Failed to copy text:', err);
-  }
-
-  // Remove the temporary textarea element
-  document.body.removeChild(tempTextArea);
-});

@@ -153,6 +153,23 @@ Include the styles from content.css
     border-radius: 10px;
   }
 
+  #custom-scrollbar-indicator {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    opacity: 100%;
+    z-index: 9999;
+  }
+  
+  #custom-scrollbar-indicator div {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    left: 0;
+  }
+
   #test-content {
    padding: 20px;
   }
