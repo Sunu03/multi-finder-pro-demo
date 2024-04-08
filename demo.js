@@ -91,6 +91,7 @@ function performPartialSearch() {
   }
   
   function highlightWordPartial(word, color) {
+    const searchInput = document.getElementById('partialSearchBtn');
     const wordRegex = new RegExp(word, 'gi');
     const testContent = document.getElementById('test-content');
   
@@ -207,7 +208,7 @@ function displayResults(results) {
     const textColor = isLightBackground ? 'black' : 'white';
 
     const textContainer = document.createElement('div');
-    textContainer.className = 'flex-grow font-bold';
+    textContainer.className = 'flex-grow font-normal pl-1 ';
     textContainer.style.color = textColor;
 
     const wordText = document.createElement('span');
@@ -223,7 +224,7 @@ function displayResults(results) {
     card.appendChild(textContainer);
 
     const positionCounter = document.createElement('span');
-    positionCounter.className = 'position-counter font-bold mr-2';
+    positionCounter.className = 'position-counter font-normal mr-2';
     positionCounter.style.color = textColor;
     positionCounter.textContent = currentPosition.hasOwnProperty(result.word) ? `${currentPosition[result.word] + 1}/${result.count}` : `0/${result.count}`;
     card.appendChild(positionCounter);
