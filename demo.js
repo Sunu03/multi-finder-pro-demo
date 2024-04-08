@@ -107,7 +107,7 @@ function performPartialSearch() {
         const replacementNode = document.createElement('span');
         replacementNode.innerHTML = node.textContent.replace(
           wordRegex,
-          `<span class="multiwordfinder-highlight" style="background-color: ${color}; color: ${getContrastColor(color)};" data-word="${word}">$&</span>`
+          `<span class="multiwordfinder-highlight rounded"  style="background-color: ${color}; color: ${getContrastColor(color)};" data-word="${word}">$&</span>`
         );
   
         let index = 0;
@@ -467,9 +467,30 @@ function toggleFolderList() {
     const wordsContainer = document.getElementById('wordsContainer');
     wordsContainer.innerHTML = '';
   
-    const savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
-    
-    
+    let savedWords = JSON.parse(localStorage.getItem('savedWords') || '{}');
+  
+    // Initialize default saved words if localStorage is empty
+    if (Object.keys(savedWords).length === 0) {
+      savedWords = {
+        "Text": [
+          { word: "Network", color: "#FFFF77" },
+          { word: "TCP", color: "#7777FF" },
+          { word: "ACK", color: "#77FF92" }
+        ],
+        "System Logs": [
+          { word: "Deauthenticating", color: "#C977FF" },
+          { word: "dropped", color: "#77FFE4" },
+          { word: "WPA", color: "#77C9FF" }
+        ],
+        "Kernal Logs": [
+          { word: "errors", color: "#FF7792" },
+          { word: "tainted", color: "#FFAE77" }
+        ]
+      };
+  
+      localStorage.setItem('savedWords', JSON.stringify(savedWords));
+    }
+  
     for (const folder in savedWords) {
       const folderDiv = document.createElement('div');
       folderDiv.classList.add('folder', 'mb-4', 'rounded-lg');
@@ -542,6 +563,10 @@ function toggleFolderList() {
     buttonContainer.appendChild(removeButton);
   
     wordListItem.appendChild(buttonContainer);
+    
+    removeButton.addEventListener('click', () => {
+      removeWord(folder, wordObj.word);
+    });
   
     return wordListItem;
   }
